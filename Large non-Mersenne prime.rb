@@ -1,4 +1,6 @@
 # https://projecteuler.net/problem=97
+# (x + y) % d = ((x % d) + (y % d)) % d 
+# (x * y) % d = ((x % d) * (y % d)) % d
 
 def mod(base, exponent, divisor)
 
@@ -19,9 +21,8 @@ def mod(base, exponent, divisor)
       remainder = (remainder * remainder_cache) % divisor
       power += power_cache
     end  
-
   end
-
+  
   remainder
 end 
 
