@@ -1,28 +1,29 @@
 # https://projecteuler.net/problem=97
 
-@exponent = STDIN.read.to_i
-@divisor = 10_000_000_000
+def mod(base, exponent, divisor)
 
-def compute_remainder(power)
-  exponents_remainders =[[1, power]]
-  exponent, remainder = 2, power
+  power, remainder = 1, base % divisor 
+  cache = []
+  
+  while power <= exponent
+    cache << [power, remainder]
+    power <<= 1
+    remainder = (remainder * remainder) % divisor
+  end 
 
-  while exponent <= @exponent
-    exponents_remainders << [exponent, remainder = (remainder ** 2) % @divisor]
-    exponent <<= 1
-  end
+  power, remainder = cache.pop
 
-  exponent, remainder = exponents_remainders.pop
+  while !cache.empty?
+    power_cache, remainder_cache = cache.pop
+    if power_cache + power <= exponent
+      remainder = (remainder * remainder_cache) % divisor
+      power += power_cache
+    end  
 
-  while !exponents_remainders.empty?
-    pre_computed_exponent, pre_computed_remainder = exponents_remainders.pop
-    if pre_computed_exponent + exponent <= @exponent
-      remainder = (remainder * pre_computed_remainder) % @divisor
-      exponent += pre_computed_exponent
-    end
   end
 
   remainder
-end
+end 
 
-(28433 * compute_remainder(2) + 1) % @divisor
+base, exponent, divisor = STDIN.read.split.map(&:to_i)
+(28433 * mod(base, exponent, divisor) + 1) % divisor
